@@ -28,6 +28,7 @@ python auto_analyzer.py --mode create --input_file xxx.csv --method regression -
 ## パラメタ説明
 ### --mode（必須）
 create：新しくモデルを作成する
+
 predict：作ったモデルで予測する
 
 ### --input_file（必須）
@@ -35,7 +36,9 @@ predict：作ったモデルで予測する
 
 ### --method（必須）
 binary：二値分類
+
 multiple：多値分類
+
 regression：回帰
 
 ### --output_file（非必須）
@@ -50,4 +53,5 @@ regression：回帰
 
 ## 動作環境
 - python 3.5.0
+
 - keras 2.0.3
