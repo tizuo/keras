@@ -12,7 +12,10 @@
 ## 使い方
 1.コマンドラインを開く
 2.データセットと本コードが格納されているディレクトリへ移動
-3.「python autoanalyzer.py + パラメタ値」で呼び出す
+3.「python auto_analyzer.py + パラメタ値」で呼び出す
+
+### 呼び出し例
+python auto_analyzer.py --mode create --input_file xxx.csv --method regression --model_file test --definition str,int,int
 
 ## パラメタ説明
 ### --mode（必須）
