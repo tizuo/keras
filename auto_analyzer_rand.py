@@ -1,4 +1,4 @@
-﻿import numpy
+import numpy
 import pandas
 from keras.models import Sequential
 from keras.layers import Dense
@@ -26,9 +26,9 @@ parser.add_argument('--method', choices=['binary', 'multiple', 'regression'], me
                     help='Model type you solve')
 parser.add_argument('--output_file', dest='output_file', default=False, required=False,
                     help='If you input output_file it will save result as directed path.')
-parser.add_argument('--model_file', dest='model_file', default=False, required=False,
+parser.add_argument('--model_file', dest='model_file', default=False, nargs='*',
                     help='If you input model_file it will save or load a model.')
-parser.add_argument('--definition', metavar='array of data type such as str, int and float with delimiter [,]', dest='definition', default=False, required=False,
+parser.add_argument('--definition', metavar='array of data type such as str, int and float with delimiter [,]', dest='definition', default=False, nargs='*',
                     help='If you define data type of columns, send array of full column definitions.')
 
 args = parser.parse_args()
@@ -149,6 +149,7 @@ class MakeModel:
 	#predict dataset
 	def predict_ds(self):
 		model = load_model(self.mfp)
+		model.summary()
 		sc = StandardScaler()
 		self.X = sc.fit_transform(self.X)
 		pr_Y = model.predict(self.X)
@@ -186,5 +187,3 @@ else:
 	#predict dataset
 	m.load_dataset()
 	m.predict_ds()
-	
-
