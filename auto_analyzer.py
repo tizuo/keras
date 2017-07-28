@@ -1,4 +1,4 @@
-﻿import numpy
+import numpy
 import pandas
 from keras.models import Sequential
 from keras.layers import Dense
@@ -65,7 +65,7 @@ class MakeModel:
 		model = Sequential()
 		model.add(Dense(neurons, input_dim=self.column_length, kernel_initializer='normal', activation='relu'))
 		for i in range(1, layers):
-			model.add(Dense(int(numpy.ceil(numpy.power(neurons,1/i))), kernel_initializer='normal', activation='relu'))
+			model.add(Dense(int(numpy.ceil(numpy.power(neurons,1/i)*2)), kernel_initializer='normal', activation='relu'))
 		model.add(Dense(cls, kernel_initializer='normal', activation=act))
 		# Compile model
 		adam = optimizers.Adam(lr=learn_rate)
@@ -82,6 +82,8 @@ class MakeModel:
 			dataframe_Y = pandas.get_dummies(dataframe[dataframe.columns[0]])	#create dummy variables
 		else:
 			dataframe_Y = dataframe[dataframe.columns[0]]
+		#print(dataframe_Y.head())
+		#print(dataframe_X.head())
 		self.row_length, self.column_length = dataframe_X.shape
 		self.X = dataframe_X.values
 		self.Y = dataframe_Y.values
@@ -96,13 +98,13 @@ class MakeModel:
 		if self.method == 'binary':
 			evMethod = ['binary_crossentropy']
 			activation = ['sigmoid']
-			metr = ['accuracy']
+			metr = [['accuracy']]
 			estimators.append(('mlp', KerasClassifier(build_fn=self.create_model, epochs=10, batch_size=200, verbose=1)))
 			cls = [1]
 		elif self.method == 'multiple':
-			evMethod = ['categorical_crossentropy']
+			evMethod = [['categorical_crossentropy']]
 			activation = ['softmax']
-			metr = ['accuracy']
+			metr = [['accuracy']]
 			estimators.append(('mlp', KerasClassifier(build_fn=self.create_model, epochs=10, batch_size=200, verbose=1)))
 			cls = [self.Y.shape[1]]
 		else:
@@ -121,11 +123,11 @@ class MakeModel:
 		learn_rate = [0.001, 0.005, 0.01, 0.07]
 		layers = [1,2,3,4,5]
 		#test parameter
-		"""batch_size = [10]
+		"""batch_size = [31]
 		epochs = [100]
-		neurons = [self.column_length]
-		learn_rate = [0.001]
-		layers = [1]"""
+		neurons = [32]
+		learn_rate = [0.01]
+		layers = [5]"""
 		#execution
 		param_grid = dict(mlp__neurons = neurons, mlp__batch_size = batch_size, mlp__epochs=epochs, mlp__learn_rate=learn_rate, mlp__layers=layers, mlp__act=activation, mlp__evMethod=evMethod, mlp__cls=cls, mlp__mtr=metr)
 		grid = GridSearchCV(estimator=pipeline, param_grid=param_grid)
@@ -148,6 +150,7 @@ class MakeModel:
 	#predict dataset
 	def predict_ds(self):
 		model = load_model(self.mfp)
+		model.summary()
 		sc = StandardScaler()
 		self.X = sc.fit_transform(self.X)
 		pr_Y = model.predict(self.X)
