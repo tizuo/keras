@@ -1,4 +1,4 @@
-import numpy
+﻿import numpy
 import pandas
 from keras.models import Sequential
 from keras.layers import Dense
@@ -24,7 +24,7 @@ parser.add_argument('--input_file', dest='input_file', type=str, nargs='+', requ
                     help='path to dataset or model')
 parser.add_argument('--method', choices=['binary', 'multiple', 'regression'], metavar='binary/multiple/regression', dest='method', type=str, nargs='+', required=True,
                     help='Model type you solve')
-parser.add_argument('--output_file', dest='output_file', default=False, required=False,
+parser.add_argument('--output_file', dest='output_file', default=False, nargs='*',
                     help='If you input output_file it will save result as directed path.')
 parser.add_argument('--model_file', dest='model_file', default=False, nargs='*',
                     help='If you input model_file it will save or load a model.')
@@ -131,6 +131,7 @@ class MakeModel:
 		param_grid = dict(mlp__neurons = neurons, mlp__batch_size = batch_size, mlp__epochs=epochs, mlp__learn_rate=learn_rate, mlp__layers=layers, mlp__act=activation, mlp__evMethod=evMethod, mlp__cls=cls, mlp__mtr=metr)
 		grid = RandomizedSearchCV(estimator=pipeline, param_distributions=param_grid, n_iter=n_iter_search)
 		grid_result = grid.fit(self.X, self.Y)
+		grid_result.predict(self.X)	#refit weight of each variables
 		
 		#output best parameter condition
 		clf = []
@@ -187,3 +188,5 @@ else:
 	#predict dataset
 	m.load_dataset()
 	m.predict_ds()
+	
+
